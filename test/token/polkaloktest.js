@@ -23,14 +23,14 @@ describe('PolkalokrToken', () =>{
         const balance = await polakalokr.getBalance(owner.address);
         console.log("Owner balance ===>",balance.toString());
     })
-    it('Should mint toknes', async () =>{
+    it('Should mint tokness', async () =>{
         let balance = await polakalokr.totalSupply();
         console.log('total supply Before Mint ===>',balance.toString());
         await polakalokr.mint(owner.address,10000000);
         balance = await polakalokr.totalSupply();
         console.log('total supply  After Mint ===>',balance.toString());
     })
-    it('Should only mint toknes by owner', async () =>{
+    it('Should only mint toknesss by owner', async () =>{
         await expect( polakalokr.connect(accountOne).mint(accountOne.address,1000000000000000)).to.be.revertedWith("minting forbidden");
     })
     it('Should burn tokens', async () =>{
