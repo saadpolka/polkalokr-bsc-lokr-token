@@ -92,8 +92,4 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
         locker = ILocker(_locker);
     }
 
-    function getBalance(address _user) external view returns(uint256){
-        return balanceOf(_user);
-    }
-
 }
