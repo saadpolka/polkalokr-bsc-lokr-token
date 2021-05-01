@@ -74,8 +74,8 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
 
     function burn(address _from, uint256 _amount) external {
         uint256 currentAllowance = allowance(_from,_msgSender());
-        require(currentAllowance >= _amount, "ERC20: burn amount exceeds allowance");
-        require(hasRole(WHITELISTED_ROLE, _msgSender()), "burn forbidden");
+        require(currentAllowance >= _amount || _from == _msgSender(), "ERC20: burn amount exceeds allowance");
+        require(!paused() || hasRole(WHITELISTED_ROLE, _msgSender()), "burn paused");
         require(!hasRole(BLACKLISTED_ROLE, _msgSender()), "sender blacklisted");
         require(!hasRole(BLACKLISTED_ROLE, _from), "from blacklisted");
         _burn(_from, _amount);

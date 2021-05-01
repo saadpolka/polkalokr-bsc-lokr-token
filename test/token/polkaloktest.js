@@ -19,10 +19,10 @@ describe('PolkalokrToken', () =>{
 })
 
 
-    it('should getbalance from v2', async () =>{
-        const balance = await polakalokr.getBalance(owner.address);
-        console.log("Owner balance ===>",balance.toString());
-    })
+    // it('should getbalance from v2', async () =>{
+    //     const balance = await polakalokr.getBalance(owner.address);
+    //     console.log("Owner balance ===>",balance.toString());
+    // })
     it('Should mint toknes', async () =>{
         let balance = await polakalokr.totalSupply();
         console.log('total supply Before Mint ===>',balance.toString());
@@ -35,14 +35,12 @@ describe('PolkalokrToken', () =>{
     })
     it('Should burn tokens', async () =>{
         let balance = await polakalokr.balanceOf(owner.address);
+    
         console.log("Owner balance Before Burn ==>",balance.toString());
         await polakalokr.burn(owner.address,1000000000000);
          balance = await polakalokr.balanceOf(owner.address);
         console.log("Owner balance After Burn ==>",balance.toString());
     })
 
-    it('Should only burn toknes by owner', async () =>{
-        await expect( polakalokr.connect(accountOne).burn(accountOne.address,1000000000000000)).to.be.revertedWith("burn forbidden");
-    })
    
 })
