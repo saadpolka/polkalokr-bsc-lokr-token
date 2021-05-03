@@ -19,18 +19,14 @@ describe('PolkalokrToken', () =>{
 })
 
 
-    it('should getbalance from v2', async () =>{
-        const balance = await polakalokr.getBalance(owner.address);
-        console.log("Owner balance ===>",balance.toString());
-    })
-    it('Should mint tokness', async () =>{
+    it('Should mint tokens', async () =>{
         let balance = await polakalokr.totalSupply();
         console.log('total supply Before Mint ===>',balance.toString());
         await polakalokr.mint(owner.address,10000000);
         balance = await polakalokr.totalSupply();
         console.log('total supply  After Mint ===>',balance.toString());
     })
-    it('Should only mint toknesss by owner', async () =>{
+    it('Should only mint tokens by owner', async () =>{
         await expect( polakalokr.connect(accountOne).mint(accountOne.address,1000000000000000)).to.be.revertedWith("minting forbidden");
     })
     it('Should burn tokens', async () =>{
@@ -41,7 +37,7 @@ describe('PolkalokrToken', () =>{
         console.log("Owner balance After Burn ==>",balance.toString());
     })
 
-    it('Should only burn toknes by owner', async () =>{
+    it('Should only burn tokens by owner', async () =>{
         await expect( polakalokr.connect(accountOne).burn(accountOne.address,1000000000000000)).to.be.revertedWith("burn forbidden");
     })
    
