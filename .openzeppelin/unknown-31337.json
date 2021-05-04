@@ -1,9 +1,9 @@
 {
   "manifestVersion": "3.1",
   "impls": {
-    "1c7d658ca046f9f14098250f4dc85900eb1f015bb1180985b7a01f0c44388fb5": {
+    "094a99d11dab0f72716770c2c448ecca0cbf94d4c5e76a149dd2b696a459b001": {
       "address": "0x61F1369c1Aa53791045F389dACF70eedb6d03Eb2",
-      "txHash": "0x8f0ceb7bf514ba29e63465e943d43df4854c939a3f7786fb7695e55752bf6e39",
+      "txHash": "0xc7f6f287670056beee2959828135341a7a4a7825fba5a60a88de5f5c17ee4ee7",
       "layout": {
         "storage": [
           {
@@ -89,18 +89,9 @@
             "label": "__gap",
             "type": "t_array(t_uint256)49_storage",
             "src": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol:222"
-          },
-          {
-            "contract": "PolkalokrToken",
-            "label": "locker",
-            "type": "t_contract(ILocker)1478",
-            "src": "contracts/token/PolkalokrToken.sol:22"
           }
         ],
         "types": {
-          "t_contract(ILocker)1478": {
-            "label": "contract ILocker"
-          },
           "t_mapping(t_bytes32,t_struct(RoleData)80_storage)": {
             "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
           },
