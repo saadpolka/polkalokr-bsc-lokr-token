@@ -15,7 +15,7 @@ describe('PolkalokrToken', () =>{
 
     beforeEach( async () =>{
         Polkalokr = await ethers.getContractFactory("PolkalokrToken");
-        polakalokr = await upgrades.deployProxy(Polkalokr,{initializer: 'initialize'});
+        polakalokr = await upgrades.deployProxy(Polkalokr,[owner.address],{initializer: 'initialize'});
 })
 
 

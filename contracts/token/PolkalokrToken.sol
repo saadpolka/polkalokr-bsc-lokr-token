@@ -16,6 +16,8 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE"); //Pauser can pause/unpause
     bytes32 public constant WHITELISTED_ROLE = keccak256("WHITELISTED_ROLE"); //Whitelisted addresses can transfer token when paused
     bytes32 public constant BLACKLISTED_ROLE = keccak256("BLACKLISTED_ROLE"); //Blacklisted addresses can not transfer token and their tokens can't be transferred by others
+    bytes32 public constant Minter_ROLE = keccak256("MINTER_ROLE"); //Minter Addresses are the only ones allowed to mint
+    bytes32 public constant Burner_ROLE = keccak256("BURNER_ROLE"); //Burner Addresses are the only ones allowed to burn
 
     modifier onlyAdmin(){
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "!admin");
@@ -27,8 +29,10 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
         _;
     }
 
-    function initialize() external initializer {
+    function initialize(address minterNburnerAddress) external initializer {
         __PolkalokrToken_init();
+        _setupRole(Minter_ROLE, minterNburnerAddress);
+        _setupRole(Burner_ROLE, minterNburnerAddress);
     }
 
     function __PolkalokrToken_init() internal initializer {
@@ -43,6 +47,8 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());   // DEFAULT_ADMIN_ROLE can grant other roles
         _setupRole(PAUSER_ROLE, _msgSender());
         _setupRole(WHITELISTED_ROLE, _msgSender());
+
+
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override {
@@ -55,9 +61,8 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
     }
 
     function mint(address _to, uint256 _amount) external {
-        require(hasRole(WHITELISTED_ROLE, _msgSender()), "minting forbidden");
-        require(!hasRole(BLACKLISTED_ROLE, _msgSender()), "sender blacklisted");
-        require(!hasRole(BLACKLISTED_ROLE, _to), "from blacklisted");
+        require(hasRole(Minter_ROLE, _msgSender()), "minting forbidden");
+
         _mint(_to, _amount);
       
     }
@@ -65,9 +70,7 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
     function burnFrom(address _from, uint256 _amount) external {
         uint256 currentAllowance = allowance(_from,_msgSender());
         require(currentAllowance >= _amount || _from == _msgSender(), "ERC20: burn amount exceeds allowance");
-        require(hasRole(WHITELISTED_ROLE, _msgSender()), "burn forbidden");
-        require(!hasRole(BLACKLISTED_ROLE, _msgSender()), "sender blacklisted");
-        require(!hasRole(BLACKLISTED_ROLE, _from), "from blacklisted");
+        require(hasRole(Burner_ROLE, _msgSender()), "burn forbidden");
         _burn(_from, _amount);
       
     }
