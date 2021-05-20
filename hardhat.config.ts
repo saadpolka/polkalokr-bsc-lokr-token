@@ -6,14 +6,14 @@ import "solidity-coverage";
 import "./tasks/accounts";
 import "./tasks/clean";
 
-require("@nomiclabs/hardhat-ethers");
-require('@openzeppelin/hardhat-upgrades');
-
 import { resolve } from "path";
 
 import { config as dotenvConfig } from "dotenv";
 import { HardhatUserConfig } from "hardhat/config";
 import { NetworkUserConfig } from "hardhat/types";
+
+require("@nomiclabs/hardhat-ethers");
+require('@openzeppelin/hardhat-upgrades');
 
 dotenvConfig({ path: resolve(__dirname, "./.env") });
 
@@ -25,6 +25,8 @@ const chainIds = {
   mainnet: 1,
   rinkeby: 4,
   ropsten: 3,
+  bsctestnet: 97,
+  mumbai:80001 ,
 };
 
 // Ensure that we have all the environment variables we need.
@@ -43,17 +45,47 @@ if (!process.env.INFURA_API_KEY) {
 }
 
 function createTestnetConfig(network: keyof typeof chainIds): NetworkUserConfig {
-  const url: string = "https://" + network + ".infura.io/v3/" + infuraApiKey;
-  return {
-    accounts: {
-      count: 10,
-      initialIndex: 0,
-      mnemonic,
-      path: "m/44'/60'/0'/0",
-    },
-    chainId: chainIds[network],
-    url,
-  };
+  if (network == "bsctestnet") {
+    const url: string = "https://data-seed-prebsc-1-s1.binance.org:8545/";
+    return {
+      accounts: {
+        count: 10,
+        initialIndex: 0,
+        mnemonic,
+        path: "m/44'/60'/0'/0",
+      },
+      chainId: chainIds[network],
+      url,
+    };
+  }
+  else if(network == "mumbai"){
+    const url: string = "https://rpc-mumbai.maticvigil.com";
+    return {
+      accounts: {
+        count: 10,
+        initialIndex: 0,
+        mnemonic,
+        path: "m/44'/60'/0'/0",
+      },
+      chainId: chainIds[network],
+      url,
+    };
+    
+  }
+  else {
+    const url: string = "https://" + network + ".infura.io/v3/" + infuraApiKey;
+
+    return {
+      accounts: {
+        count: 10,
+        initialIndex: 0,
+        mnemonic,
+        path: "m/44'/60'/0'/0",
+      },
+      chainId: chainIds[network],
+      url,
+    };
+  }
 }
 
 const config: HardhatUserConfig = {
@@ -75,6 +107,8 @@ const config: HardhatUserConfig = {
     kovan: createTestnetConfig("kovan"),
     rinkeby: createTestnetConfig("rinkeby"),
     ropsten: createTestnetConfig("ropsten"),
+    bsctestnet: createTestnetConfig("bsctestnet"),
+    mumbai: createTestnetConfig("mumbai"),
   },
   paths: {
     artifacts: "./artifacts",
@@ -83,7 +117,7 @@ const config: HardhatUserConfig = {
     tests: "./test",
   },
   solidity: {
-    version: "0.8.0",
+    version: "0.8.3",
     settings: {
       metadata: {
         // Not including the metadata hash
