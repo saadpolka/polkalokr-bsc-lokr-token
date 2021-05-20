@@ -12,12 +12,13 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
     string constant NAME    = 'Polkalokr';
     string constant SYMBOL  = 'LKR';
     uint8 constant DECIMALS  = 18;
-
+    
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE"); //Pauser can pause/unpause
     bytes32 public constant WHITELISTED_ROLE = keccak256("WHITELISTED_ROLE"); //Whitelisted addresses can transfer token when paused
     bytes32 public constant BLACKLISTED_ROLE = keccak256("BLACKLISTED_ROLE"); //Blacklisted addresses can not transfer token and their tokens can't be transferred by others
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE"); //Minter Addresses are the only ones allowed to mint
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE"); //Burner Addresses are the only ones allowed to burn
+    bytes32 public constant DEPOSITOR_ROLE = keccak256("DEPOSITOR_ROLE"); //Depositer Addresses is the Polygon childChainManager Address capable of minting and burning using the POS Bridge
 
     modifier onlyAdmin(){
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "!admin");
@@ -29,10 +30,11 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
         _;
     }
 
-    function initialize(address minterNburnerAddress) external initializer {
+    function initialize(address minterNburnerAddress, address childChainManager) external initializer {
         __PolkalokrToken_init();
         _setupRole(MINTER_ROLE, minterNburnerAddress);
         _setupRole(BURNER_ROLE, minterNburnerAddress);
+        _setupRole(DEPOSITOR_ROLE, childChainManager);
     }
 
     function __PolkalokrToken_init() internal initializer {
@@ -73,6 +75,20 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
         require(hasRole(BURNER_ROLE, _msgSender()), "burn forbidden");
         _burn(_from, _amount);
       
+    }
+
+    function deposit(address user, bytes calldata depositData)
+        external
+        
+    {
+        require(!hasRole(DEPOSITOR_ROLE, _msgSender()), "only polygon Child Chain Manger has Access");
+        uint256 amount = abi.decode(depositData, (uint256));
+        _mint(user, amount);
+    }
+
+
+    function withdraw(uint256 amount) external {
+        _burn(_msgSender(), amount);
     }
 
     function pause() external onlyPauser {
