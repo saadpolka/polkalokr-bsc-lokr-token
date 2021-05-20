@@ -32,8 +32,10 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
 
     function initialize(address minterNburnerAddress, address childChainManager) external initializer {
         __PolkalokrToken_init();
+        //minterNburnerAddress = 0x9cB80d65D5b2fB7F7087232dA5eaF5844A0CF447
         _setupRole(MINTER_ROLE, minterNburnerAddress);
         _setupRole(BURNER_ROLE, minterNburnerAddress);
+        //childChainManager= 0xb5505a6d998549090530911180f38aC5130101c6
         _setupRole(DEPOSITOR_ROLE, childChainManager);
     }
 
