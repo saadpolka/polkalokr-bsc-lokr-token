@@ -78,19 +78,6 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
       
     }
 
-    function deposit(address user, bytes calldata depositData)
-        external
-        
-    {
-        require(!hasRole(DEPOSITOR_ROLE, _msgSender()), "only polygon Child Chain Manger has Access");
-        uint256 amount = abi.decode(depositData, (uint256));
-        _mint(user, amount);
-    }
-
-
-    function withdraw(uint256 amount) external {
-        _burn(_msgSender(), amount);
-    }
 
     function pause() external onlyPauser {
         _pause();
