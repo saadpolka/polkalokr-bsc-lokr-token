@@ -15,14 +15,15 @@ describe('PolkalokrToken', () =>{
 
     beforeEach( async () =>{
         Polkalokr = await ethers.getContractFactory("PolkalokrToken");
-        polakalokr = await upgrades.deployProxy(Polkalokr,[owner.address],{initializer: 'initialize'});
+        polakalokr = await upgrades.deployProxy(Polkalokr,[owner.address,"0xb5505a6d998549090530911180f38aC5130101c6"],{initializer: 'initialize'});
 })
 
 
     it('Should mint tokens', async () =>{
         let balance = await polakalokr.totalSupply();
         console.log('total supply Before Mint ===>',balance.toString());
-        await polakalokr.mint(owner.address,100000000000000);
+
+        console.log(await polakalokr.mint(owner.address,100000000000000));
         balance = await polakalokr.totalSupply();
         console.log('total supply  After Mint ===>',balance.toString());
     })

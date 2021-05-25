@@ -18,7 +18,6 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
     bytes32 public constant BLACKLISTED_ROLE = keccak256("BLACKLISTED_ROLE"); //Blacklisted addresses can not transfer token and their tokens can't be transferred by others
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE"); //Minter Addresses are the only ones allowed to mint
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE"); //Burner Addresses are the only ones allowed to burn
-    bytes32 public constant DEPOSITOR_ROLE = keccak256("DEPOSITOR_ROLE"); //Depositer Addresses is the Polygon childChainManager Address capable of minting and burning using the POS Bridge
 
     modifier onlyAdmin(){
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "!admin");
@@ -30,13 +29,12 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
         _;
     }
 
-    function initialize(address minterNburnerAddress, address childChainManager) external initializer {
+    function initialize(address minterNburnerAddress) external initializer {
         __PolkalokrToken_init();
         //minterNburnerAddress = 0x9cB80d65D5b2fB7F7087232dA5eaF5844A0CF447
         _setupRole(MINTER_ROLE, minterNburnerAddress);
         _setupRole(BURNER_ROLE, minterNburnerAddress);
-        //childChainManager= 0xb5505a6d998549090530911180f38aC5130101c6
-        _setupRole(DEPOSITOR_ROLE, childChainManager);
+
     }
 
     function __PolkalokrToken_init() internal initializer {
@@ -64,10 +62,11 @@ contract PolkalokrToken is ERC20Upgradeable, PausableUpgradeable, AccessControlU
        
     }
 
-    function mint(address _to, uint256 _amount) external {
+    function mint(address _to, uint256 _amount) external returns(uint256){
         require(hasRole(MINTER_ROLE, _msgSender()), "minting forbidden");
 
         _mint(_to, _amount);
+        return 5;
       
     }
 

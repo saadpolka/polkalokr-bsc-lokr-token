@@ -1,9 +1,9 @@
 {
   "manifestVersion": "3.1",
   "impls": {
-    "42b5db34e38680f4d0e97114b1499589ac646be82455cf94b427f25c443ab9ab": {
+    "fea46d9e1d1108b8f46a37368585594c596d850bf36796732869631b1ef1cb14": {
       "address": "0x61F1369c1Aa53791045F389dACF70eedb6d03Eb2",
-      "txHash": "0x211c4da356c12307edecdb4224ee11af2b2e026bc1866fbd3b1b71e609c7c839",
+      "txHash": "0x23ce042cd3957415ddc8d1cac39ba65eed08e5e55434b3387901839306af6c12",
       "layout": {
         "storage": [
           {
